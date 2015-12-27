@@ -1,0 +1,40 @@
+{
+  "name": "react-webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ex1": "webpack-dev-server --inline --entry examples/1/index.js",
+    "ex2": "webpack-dev-server --inline --entry examples/2/index.js",
+    "ex3": "webpack-dev-server --inline --entry examples/3/index.js",
+    "ex4": "webpack-dev-server --inline --entry examples/4/index.js",
+    "ex5": "webpack-dev-server --inline --entry examples/5/index.js",
+    "ex6": "webpack-dev-server --inline --entry examples/6/index.js,",
+    "ex7": "webpack-dev-server --inline --entry examples/7/index.js",
+    "ex8": "webpack-dev-server --inline --entry examples/8/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-plugin-typecheck": "^3.5.1",
+    "history": "^1.17.0",
+    "immutable": "^3.7.6",
+    "ramda": "^0.18.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "rx": "^4.0.7"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.21",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-react-transform": "^2.0.0-beta1",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-2": "^6.3.13",
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  }
+}
