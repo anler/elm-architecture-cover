@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { message } from 'elm/html-events';
+import { message } from 'olmo/html-events';
 
 
 // model

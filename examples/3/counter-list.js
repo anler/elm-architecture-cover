@@ -1,8 +1,8 @@
 import React from 'react';
 import R from 'ramda';
 
-import { forwardTo } from 'elm';
-import { message } from 'elm/html-events';
+import { forwardTo } from 'olmo';
+import { message } from 'olmo/html-events';
 
 import Counter from './counter';
 

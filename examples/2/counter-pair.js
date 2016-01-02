@@ -1,7 +1,9 @@
-import React from 'react';
+/** @jsx html */
+import { html } from 'snabbdom-jsx';
+import Type from 'union-type';
 
-import { forwardTo } from 'elm';
-import { message } from 'elm/html-events';
+import { forwardTo } from 'olmo';
+import { message } from 'olmo/html-events';
 
 import Counter from './counter';
 
@@ -16,41 +18,28 @@ export function init(topValue, bottomValue) {
 
 
 // actions
-export const actions = {
-  top(counterAction) {
-    return { type: 'Top', counterAction };
-  },
-  bottom(counterAction) {
-    return { type: 'Bottom', counterAction };
-  },
-  reset() {
-    return { type: 'Reset' };
-  }
-};
+export const Action = Type({
+  Top: [Counter.Action],
+  Bottom: [Counter.Action],
+  Reset: []
+});
 
 
 //update
 export function update(action, model) {
-  switch(action.type) {
+  return Action.case({
+    Reset: () => init(0, 0),
 
-  case 'Reset':
-    return init(
-      Counter.init(0),
-      Counter.init(0)
-    );
-
-  case 'Top':
-    return init(
-      Counter.update(action.counterAction, model.top),
+    Top: (counterAction) => init(
+      Counter.update(counterAction, model.top),
       model.bottom
-    );
+    ),
 
-  case 'Bottom':
-    return init(
+    Bottom: (counterAction) => init(
       model.top,
-      Counter.update(action.counterAction, model.bottom)
-    );
-  }
+      Counter.update(counterAction, model.bottom)
+    )
+  }, action);
 }
 
 
@@ -58,11 +47,11 @@ export function update(action, model) {
 export function view(address, model) {
   return (
     <div>
-      { Counter.view(forwardTo(address, actions.top), model.top) }
-      { Counter.view(forwardTo(address, actions.bottom), model.bottom) }
-      <button onClick={message(address, actions.reset())}>Reset</button>
+      { Counter.view(forwardTo(address, Action.Top), model.top) }
+      { Counter.view(forwardTo(address, Action.Bottom), model.bottom) }
+      <button on-click={ message(address, Action.Reset()) }>Reset</button>
     </div>
   );
 }
 
-export default { init, update, view, actions };
+export default { init, update, view };

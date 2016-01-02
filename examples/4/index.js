@@ -1,8 +1,8 @@
 import { render } from 'react-dom';
 import { partialRight } from 'ramda';
 
-import { main } from 'elm';
-import { startSimple } from 'elm/start-app';
+import { main } from 'olmo';
+import { startSimple } from 'olmo/start-app';
 
 import { init, view, update } from './counter-list';
 

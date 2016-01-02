@@ -1,6 +1,7 @@
-import React from 'react';
-
-import { message } from 'elm/html-events';
+/** @jsx html */
+import { html } from 'snabbdom-jsx';
+import Type from 'union-type';
+import { message } from 'olmo/html-events';
 
 
 // model
@@ -10,38 +11,29 @@ export function init(value) {
 
 
 // actions
-export const actions = {
-  increment() {
-    return { type: 'Increment' };
-  },
-  decrement() {
-    return { type: 'Decrement' };
-  }
-};
+export const Action = Type({
+  Increment: [],
+  Decrement: []
+});
 
 
 // update
 export function update(action, model) {
-  switch(action.type) {
-
-  case 'Increment':
-    return model + 1;
-
-  case 'Decrement':
-    return model - 1;
-
-  }
+  return Action.case({
+    Increment: () => model + 1,
+    Decrement: () => model - 1
+  }, action);
 }
 
 // view
 export function view(address, model) {
   return (
     <div>
-      <button onClick={message(address, actions.decrement())}>-</button>
-      <span>{model}</span>
-      <button onClick={message(address, actions.increment())}>+</button>
+      <button on-click={message(address, Action.Decrement())}>-</button>
+      <span>{ model }</span>
+      <button on-click={message(address, Action.Increment())}>+</button>
     </div>
   );
 }
 
-export default { init, view, update, actions };
+export default { init, view, update, Action };

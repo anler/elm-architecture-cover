@@ -3,3 +3,4 @@ node_modules/
 dist/*
 !dist/index.html
 .tern-*
+/npm-debug.log

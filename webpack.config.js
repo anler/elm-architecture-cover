@@ -1,13 +1,14 @@
 var path = require('path');
 
-function root(dir) {
+function root() {
   return path.join.apply(path, [__dirname].concat(Array.prototype.slice.call(arguments)));
 }
 
 module.exports = {
   devtool: 'inline-source-map',
   resolve: {
-    root: [root(), root('lib')]
+    root: [root(), root('lib')],
+    extensions: ['', '.jsx', '.js']
   },
   output: {
     path: root(),
