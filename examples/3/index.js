@@ -1,14 +1,13 @@
 import { render } from 'react-dom';
 import { partialRight } from 'ramda';
 
-import { main } from 'olmo';
-import { startSimple } from 'olmo/start-app';
+import { runApp, SimpleApp } from 'olmo';
 
 import { init, view, update } from './counter-list';
 
-const app = startSimple({ model: init(), update, view });
+const app = SimpleApp({ model: init(), update, view });
 
-main(
+runApp(
   app,
-  partialRight(render, [document.getElementById('root')])
+  document.getElementById('root')
 );

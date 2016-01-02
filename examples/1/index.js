@@ -1,11 +1,10 @@
-import { main } from 'olmo';
-import { startSimple } from 'olmo/start-app';
+import { runApp, SimpleApp } from 'olmo';
 
 import { init, view, update } from './counter';
 
-const app = startSimple({ model: init(0), update, view });
+const app = SimpleApp({ model: init(0), update, view });
 
-main(
+runApp(
   app,
   document.getElementById('root')
 );

@@ -1,7 +1,8 @@
 /** @jsx html */
 import { html } from 'snabbdom-jsx';
 import Type from 'union-type';
-import { message } from 'olmo/html-events';
+
+import { message } from 'olmo';
 
 
 // model
