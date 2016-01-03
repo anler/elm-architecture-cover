@@ -26,8 +26,9 @@ export function update(action, model) {
   }, action);
 }
 
+
 // view
-export function view(address, model) {
+export function view({ address, model }) {
   return (
     <div>
       <button on-click={message(address, Action.Decrement())}>-</button>

@@ -1,6 +1,3 @@
-import { render } from 'react-dom';
-import { partialRight } from 'ramda';
-
 import { runApp, SimpleApp } from 'olmo';
 
 import { init, view, update } from './counter-list';

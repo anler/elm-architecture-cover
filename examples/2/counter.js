@@ -1,7 +1,8 @@
 /** @jsx html */
 import { html } from 'snabbdom-jsx';
 import Type from 'union-type';
-import { message } from 'olmo/html-events';
+
+import { message } from 'olmo';
 
 
 // model
@@ -25,8 +26,9 @@ export function update(action, model) {
   }, action);
 }
 
+
 // view
-export function view(address, model) {
+export function view({ address, model }) {
   return (
     <div>
       <button on-click={message(address, Action.Decrement())}>-</button>

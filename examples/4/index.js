@@ -1,5 +1,3 @@
-import { render } from 'react-dom';
-
 import { runApp, SimpleApp } from 'olmo';
 
 import { init, view, update } from './counter-list';

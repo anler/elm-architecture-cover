@@ -1,8 +1,9 @@
-import React from 'react';
-import R from 'ramda';
+/** @jsx html */
+import { html } from 'snabbdom-jsx';
+import Type from 'union-type';
+import { append, drop } from 'ramda';
 
-import { forwardTo } from 'olmo';
-import { message } from 'olmo/html-events';
+import { forwardTo, message } from 'olmo';
 
 import Counter from './counter';
 
@@ -12,72 +13,54 @@ export function init(counters=[], nextID=1) {
   return { counters, nextID };
 }
 
+
 // actions
-export const actions = {
-  insert() {
-    return { type: 'Insert' };
-  },
-  remove() {
-    return { type: 'Remove' };
-  },
-  modify(counterID) {
-    return function(counterAction) {
-      return { type: 'Modify', counterID, counterAction };
-    };
-  }
-};
+export const Action = Type({
+  Insert: [],
+  Remove: [],
+  Modify: [Number, Counter.Action]
+});
 
 
 //update
 export function update(action, model) {
-  switch(action.type) {
-
-  case 'Insert':
-    const newCounter = [model.nextID, Counter.init(0)];
-    return init(
-      R.append(newCounter, model.counters),
+  return Action.case({
+    Insert: () => init(
+      append({ id: model.nextID, counter: Counter.init(0)}, model.counters),
       model.nextID + 1
-    );
+    ),
 
-  case 'Remove':
-    return init(
-      R.drop(1, model.counters),
+    Remove: () => init(
+      drop(1, model.counters),
       model.nextID
-    );
+    ),
 
-  case 'Modify':
-    const updateCounter = ([id, counter]) => {
-      if (id === action.counterID)
-        return [id, Counter.update(action.counterAction, counter)];
-      return [id, counter];
-    };
-
-    return init(
-      R.map(updateCounter, model.counters),
+    Modify: (counterID, counterAction) => init(
+      model.counters.map(
+        ({id, counter}) => id === counterID ? { id, counter: Counter.update(counterAction, counter)} : {id, counter}),
       model.nextID
-    );
-
-  }
+    )
+  }, action);
 }
 
 
 // view
-export function view(address, model) {
-  const viewCounter = ([id, counter]) => (
-    <div key={id}>
-      { Counter.view(forwardTo(address, actions.modify(id)), counter) }
-    </div>
-  );
-
-  const counters = R.map(viewCounter, model.counters);
+export function view({ address, model }) {
+  let counters = model.counters.map(({id, counter}) => (
+    <li>
+      <Counter address={forwardTo(address, Action.Modify(id))} model={counter} />
+    </li>
+  ));
 
   return (
     <div>
-      <button onClick={message(address, actions.insert())}>Insert</button>
-      <button onClick={message(address, actions.remove())}>Remove</button>
-      {counters}
+      <button on-click={message(address, Action.Insert())}>Insert</button>
+      <button on-click={message(address, Action.Remove())}>Remove</button>
+      <ul>
+        {counters}
+      </ul>
     </div>
   );
 }
 
-export default { init, update, view, actions };
+export default { init, update, view };

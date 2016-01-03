@@ -44,12 +44,12 @@ export function update(action, model) {
 
 
 // view
-export function view(address, model) {
+export function view({ address, model }) {
   return (
     <div>
-      { Counter.view(forwardTo(address, Action.Top), model.top) }
-      { Counter.view(forwardTo(address, Action.Bottom), model.bottom) }
-      <button on-click={ message(address, Action.Reset()) }>Reset</button>
+      <Counter address={forwardTo(address, Action.Top)} model={model.top} />
+      <Counter address={forwardTo(address, Action.Bottom)} model={model.bottom} />
+      <button on-click={message(address, Action.Reset())}>Reset</button>
     </div>
   );
 }
