@@ -1,8 +1,8 @@
 import { runApp, SimpleApp } from 'olmo';
 
-import { init, view, update } from './counter';
+import Counter from './counter';
 
-const app = SimpleApp({ model: init(0), update, view });
+const app = SimpleApp(Counter);
 
 runApp(
   app,

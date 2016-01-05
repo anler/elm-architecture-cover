@@ -2,11 +2,13 @@
 import { html } from 'snabbdom-jsx';
 import Type from 'union-type';
 
-import { message } from 'olmo';
+import { onEvent } from 'olmo/html';
+
+import { send } from 'olmo';
 
 
 // model
-export function init(value) {
+export function init(value=0) {
   return value;
 }
 
@@ -31,9 +33,9 @@ export function update(action, model) {
 export function view({ address, model }) {
   return (
     <div>
-      <button on-click={message(address, Action.Decrement())}>-</button>
+      <button on-click={ onEvent(address, Action.Decrement) }>-</button>
       <span>{ model }</span>
-      <button on-click={message(address, Action.Increment())}>+</button>
+      <button on-click={ onEvent(address, Action.Increment) }>+</button>
     </div>
   );
 }
