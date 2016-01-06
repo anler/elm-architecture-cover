@@ -5,11 +5,11 @@ import Rx from 'rx';
 
 import './style.css';
 
-import { onSubmit, onValue } from 'olmo/html';
+import { onEvent, onValue } from 'olmo/html';
 import Effects from 'olmo/effects';
 
 
-export function init(username='', password='', status='') {
+export function init(username='john', password='doe', status='') {
   return [
     { username, password, status },
     Effects.none()
@@ -18,8 +18,10 @@ export function init(username='', password='', status='') {
 
 export const Action = Type({
   Login: [],
+  CancelLogin: [],
   LoginSucceeded: [String],
   LoginFailed: [],
+  LoginCancelled: [],
 
   InputUsername: [String],
   InputPassword: [String]
@@ -27,19 +29,29 @@ export const Action = Type({
 
 
 function login({ username, password }) {
-  console.log(new Date, 'creating effect');
+  console.log("Login in.....");
   return Rx.Observable.create((observer) => {
     setTimeout(() => {
       observer.onNext(Action.LoginSucceeded('token'));
       observer.onCompleted();
-    }, 1000);
+    }, 5000);
   });
   return Rx.Observable.just(Action.LoginSucceeded('api token'));
 }
 
 function loginSucc() {
-  console.log('succeeded');
+  console.log('Login succeeded.');
   return Effects.none();
+}
+
+function cancelLogin() {
+  console.log('Cancelling...');
+  return Rx.Observable.just(Action.CancelLogin());
+}
+
+function loginCancelled() {
+  console.log('Login cancelled.');
+
 }
 
 export function update(action, model) {
@@ -49,9 +61,19 @@ export function update(action, model) {
       login(model)
     ],
 
+    CancelLogin: () => [
+      {...model, status: 'cancelling...'},
+      cancelLogin()
+    ],
+
     LoginSucceeded: () => [
-      {...model, status: ''},
+      {...model, status: 'succeeded'},
       loginSucc()
+    ],
+
+    LoginCancelled: () => [
+      {...model, status: 'cancelled'},
+      loginCancelled()
     ],
 
     LoginFailed: () => [
@@ -74,8 +96,21 @@ export function update(action, model) {
 
 
 export function view({ address, model }) {
+  let login$ = new Rx.Subject();
+  let cancel$ = new Rx.Subject();
+
+  login$.takeUntil(cancel$).subscribe(() => console.log('sup'));
+
+  function login() {
+    login$.onNext();
+  }
+
+  function cancel() {
+    cancel$.onNext();
+  }
+
   return (
-    <form classNames="login" on-submit={ onSubmit(address, Action.Login) }>
+    <div classNames="login">
       <h1>Login</h1>
 
       <input
@@ -95,8 +130,13 @@ export function view({ address, model }) {
         {model.status}
       </p>
 
-      <button>Sign in</button>
-    </form>
+      <p>
+        <button on-click={ login }>Sign in</button>
+      </p>
+      <p>
+        <button on-click={ cancel }>Cancel</button>
+      </p>
+    </div>
   );
 }
 
