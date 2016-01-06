@@ -5,7 +5,7 @@ import Rx from 'rx';
 
 import './style.css';
 
-import { onEvent, onValue } from 'olmo/html';
+import { onSubmit, onEvent, onValue } from 'olmo/html';
 import Effects from 'olmo/effects';
 
 
@@ -30,13 +30,13 @@ export const Action = Type({
 
 function login({ username, password }) {
   console.log("Login in.....");
+  // return Rx.Observable.just(Action.LoginSucceeded('api token'));
   return Rx.Observable.create((observer) => {
     setTimeout(() => {
       observer.onNext(Action.LoginSucceeded('token'));
       observer.onCompleted();
     }, 5000);
   });
-  return Rx.Observable.just(Action.LoginSucceeded('api token'));
 }
 
 function loginSucc() {
@@ -96,21 +96,8 @@ export function update(action, model) {
 
 
 export function view({ address, model }) {
-  let login$ = new Rx.Subject();
-  let cancel$ = new Rx.Subject();
-
-  login$.takeUntil(cancel$).subscribe(() => console.log('sup'));
-
-  function login() {
-    login$.onNext();
-  }
-
-  function cancel() {
-    cancel$.onNext();
-  }
-
   return (
-    <div classNames="login">
+    <form classNames="login" on-submit={ onSubmit(address, Action.Login) }>
       <h1>Login</h1>
 
       <input
@@ -131,12 +118,9 @@ export function view({ address, model }) {
       </p>
 
       <p>
-        <button on-click={ login }>Sign in</button>
+        <button>Sign in</button>
       </p>
-      <p>
-        <button on-click={ cancel }>Cancel</button>
-      </p>
-    </div>
+    </form>
   );
 }
 
