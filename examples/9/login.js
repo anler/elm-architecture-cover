@@ -29,29 +29,12 @@ export const Action = Type({
 
 
 function login({ username, password }) {
-  console.log("Login in.....");
-  // return Rx.Observable.just(Action.LoginSucceeded('api token'));
   return Rx.Observable.create((observer) => {
     setTimeout(() => {
       observer.onNext(Action.LoginSucceeded('token'));
       observer.onCompleted();
-    }, 5000);
+    }, 2000);
   });
-}
-
-function loginSucc() {
-  console.log('Login succeeded.');
-  return Effects.none();
-}
-
-function cancelLogin() {
-  console.log('Cancelling...');
-  return Rx.Observable.just(Action.CancelLogin());
-}
-
-function loginCancelled() {
-  console.log('Login cancelled.');
-
 }
 
 export function update(action, model) {
@@ -68,16 +51,6 @@ export function update(action, model) {
 
     LoginSucceeded: () => [
       {...model, status: 'succeeded'},
-      loginSucc()
-    ],
-
-    LoginCancelled: () => [
-      {...model, status: 'cancelled'},
-      loginCancelled()
-    ],
-
-    LoginFailed: () => [
-      {...model, status: 'Login failed'},
       Effects.none()
     ],
 
@@ -124,4 +97,4 @@ export function view({ address, model }) {
   );
 }
 
-export default { init, view, update, inputs: [] };
+export default { init: init(), view, update, inputs: [] };
