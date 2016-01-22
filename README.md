@@ -1,3 +1,5 @@
+*NOTE*: Development of this experiment is going on now here: [kaleidos/olmo](https://github.com/kaleidos/olmo/)
+
 # Elm Architecture Tutorial written in JS #
 
 ## What ##
